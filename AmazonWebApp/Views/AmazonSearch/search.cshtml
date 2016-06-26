@@ -1,0 +1,91 @@
+﻿@model IEnumerable<AmazonWebApp.Models.AmazonSearch>
+
+@{ ViewBag.Title = "Index"; }
+
+<h2>Search from Amazon.co.uk site</h2>
+
+<!-- Search textbox and button -->
+@using (Html.BeginForm("Search", "AmazonSearch", FormMethod.Post)) {
+    <div class="row">
+        <div class="col-lg-4 col-md-5 col-sm-6 col-xs-6">
+            <div class="input-group">
+                @Html.TextBox("searchString", null, new { @class = "form-control" })
+                <span class="input-group-btn">
+                    <input type="submit" class="btn btn-default" value="Search" />
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+<br>
+
+<!-- Showing total results number -->
+@Html.Raw(ViewBag.Message)
+
+<!-- With 0 results, don't show the table -->
+@if (ViewBag.Message[7] != 0) {
+    <!-- Table -->
+    <table class="table table-hover table-responsive"  cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+    </table>
+
+    <!-- Script for displaying search results -->
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                // Disabling DataTable inner search
+                "bFilter": false,
+                ajax: {
+                    url: "/Content/results.json",
+                    dataSrc: "Items.Item",
+                    responsive: true
+                },
+                searchDelay: 100,
+                "pagingType": "simple_numbers",
+                lengthMenu: [13, 20, 25, 50],
+                columns: [
+                    {
+                        // Display item name with link
+                        data: null,
+                        render: function (data, type, full, meta) {
+                            return '<a href="' + full.DetailPageURL + '">' + full.ItemAttributes.Title + '</a>'
+                        }
+                    },
+                    {
+                        // Display item price
+                        data: null,
+                        render: function (data, type, full, meta) {
+                            // Checking for offers
+                            if (full.OfferSummary) {
+                                // Checking for new item price
+                                if (full.OfferSummary.LowestNewPrice) {
+                                    return full.OfferSummary.LowestNewPrice.FormattedPrice
+                                }
+                                // Checking for used item price
+                                if (full.OfferSummary.LowestUsedPrice) {
+                                    return full.OfferSummary.LowestUsedPrice.FormattedPrice
+                                }
+                                // Checking for collectible item price
+                                if (full.OfferSummary.LowestCollectiblePrice) {
+                                    return full.OfferSummary.LowestCollectiblePrice.FormattedPrice
+                                }
+                                    // In case OfferSummary tag exists but does not contain info
+                                else { return "N/A" }
+                            }
+                            else { return "N/A" }
+                        }
+                    }
+                ]
+            });
+        });
+
+
+
+    </script>
+}

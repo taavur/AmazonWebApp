@@ -1,9 +1,23 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
-@{
-    ViewBag.Title = "Error";
+@{ ViewBag.Title = "Oops!"; }
+
+<h2>Oops!</h2>
+
+
+@using (Html.BeginForm("Search", "AmazonSearch", FormMethod.Post)) {
+    <div class="row">
+        <div class="col-lg-4 col-md-5 col-sm-6 col-xs-6">
+            <div class="input-group">
+                @Html.TextBox("searchString", null, new { @class = "form-control" })
+                <span class="input-group-btn">
+                    <input type="submit" class="btn btn-default" value="Search" />
+                </span>
+            </div>
+        </div>
+    </div>
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<br>
 
+<div class="well">Searching keyword must be at least 3 characters to get reasonable results.</div>
