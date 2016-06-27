@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 
 namespace AmazonWebApp.Controllers {
     public class AmazonSearchController : Controller {
-        private const string keyID = "AKIAJLWDSUOXUJKC2FWA";
-        private const string secKey = "aZIiyItwX8rkpJrauU90Be4xxpWu0H95jMTkEDau";
-        private const string tag = "prograpracti-21";
+        private const string keyID = "INSERT";
+        private const string secKey = "INSERT";
+        private const string tag = "INSERT";
         private const string destination = "webservices.amazon.co.uk";
         public string jsonResultsString = "None";
         XNamespace ns = "http://webservices.amazon.com/AWSECommerceService/2011-08-01";
